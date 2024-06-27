@@ -18,12 +18,16 @@
     
     3. Brackets :
         -> Right Bracket In Beginning             :  )5+3
-        -> No Operator Before Left Bracket        :  5(3)
+        -> Digit Before Left Bracket              :  5(3)
+        -> Digit After Right Bracket              :  (5+3)2
         -> Right Bracket Without Left Bracket     :  5)
         -> Unclosed Left Bracket                  :  5*(3/(6+2)
         -> More Right Brackets Than Left Brackets :  5*(3/(6+2)))
         
 # Bugs :
+    1. Digit After Right Bracket
+
+# Fixed Bugs :
     1. More Than One Decimal In A Number
 
 # Features To Be Added :
