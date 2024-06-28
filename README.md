@@ -25,10 +25,10 @@
         -> More Right Brackets Than Left Brackets :  5*(3/(6+2)))
         
 # Bugs :
-    1. Digit After Right Bracket
 
 # Fixed Bugs :
     1. More Than One Decimal In A Number
+    2. Digit After Right Bracket
 
 # Features To Be Added :
     1. Responsiveness

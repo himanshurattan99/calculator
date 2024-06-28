@@ -81,7 +81,9 @@ Array.from(buttons).forEach((element) =>
             }
             // If Input Is A Digit
             else {
-                inputField.value += element.innerHTML;
+                if (lastToken !== ')') {
+                    inputField.value += element.innerHTML;
+                }
             }
         }
     }
