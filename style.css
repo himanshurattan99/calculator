@@ -69,12 +69,12 @@ main {
     color: #97E5FF;
 }
 
-.operator {
+.operator-button {
     background-color: #0076CE;
     color: #E0FFFF;
 }
 
-.operator:hover {
+.operator-button:hover {
     background-color: #003C69;
     color: #E0FFFF;
 }

@@ -1,6 +1,12 @@
-const buttons = document.getElementsByClassName('calculator-button');
 const inputField = document.getElementById('inputField');
 const outputField = document.getElementById('outputField');
+const allClearButton = document.getElementById('all-clear-button');
+const bracketsButton = document.getElementById('brackets-button');
+const operatorButtons = document.getElementsByClassName('operator-button');
+const digitButtons = document.getElementsByClassName('digit-button');
+const decimalButton = document.getElementById('decimal-button');
+const backspaceButton = document.getElementById('backspace-button');
+const equalToButton = document.getElementById('equal-to-button');
 
 const operators = ['+', '-', '*', '/', '%'];
 const digits = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
@@ -11,13 +17,41 @@ const bracketsCount = {
     ')': 0,
 }
 
+// Storing The Last Entered Token In Input Field
+let lastToken = inputField.value.slice(-1);
+
 // Adding Click Event Listeners To All The Calculator Buttons
-Array.from(buttons).forEach((element) =>
+
+// 'AC' Button : Clearing Expression
+allClearButton.addEventListener('click', () => {
+    inputField.value = '';
+    outputField.innerHTML = '';
+    bracketsCount['('] = 0;
+    bracketsCount[')'] = 0;
+});
+
+// '()' Button : Adding Brackets While Validating Expression Syntax
+bracketsButton.addEventListener('click', () => {
+    lastToken = inputField.value.slice(-1);
+
+    if (bracketsCount['('] > bracketsCount[')'] || bracketsCount['('] === 0) {
+        if (bracketsCount['('] !== 0 && (digits.includes(lastToken) || lastToken === ')')) {
+            inputField.value += ')';
+            bracketsCount[')']++;
+        }
+        else if (inputField.value === '' || operators.includes(lastToken) || lastToken === '(') {
+            inputField.value += '(';
+            bracketsCount['(']++;
+        }
+    }
+});
+
+// Operator Buttons : Evaluating Input Field Expression Or Appending Operator While Validating Expression Syntax
+Array.from(operatorButtons).forEach((element) => {
     element.addEventListener('click', () => {
-        // Storing The Last Entered Token In Input Field
-        let lastToken = inputField.value.slice(-1);
-        // '=' Button : Evaluating Input Field Field Expression To Output Field
+        // If '=' Operator Button Is Clicked
         if (element.innerHTML === '=') {
+            // Evaluating Input Field Expression To Output Field
             try {
                 outputField.innerHTML = '= ' + eval(inputField.value);
             }
@@ -25,66 +59,54 @@ Array.from(buttons).forEach((element) =>
                 outputField.innerHTML = 'Invalid Expression';
             }
         }
-        // 'AC' Button : Clearing Expression
-        else if (element.innerHTML === 'AC') {
-            inputField.value = '';
-            outputField.innerHTML = '';
-            bracketsCount['('] = 0;
-            bracketsCount[')'] = 0;
-        }
-        // '←' Button : Back Button
-        else if (element.innerHTML === '←') {
-            if (lastToken === '(' || lastToken === ')') {
-                bracketsCount[lastToken]--;
-            }
-            inputField.value = inputField.value.slice(0, -1);
-        }
-        // '()' Button : Adding Brackets While Validating Expression Syntax
-        else if (element.innerHTML === '( )') {
-            if (bracketsCount['('] > bracketsCount[')'] || bracketsCount['('] === 0) {
-                if (bracketsCount['('] !== 0 && (digits.includes(lastToken) || lastToken === ')')) {
-                    inputField.value += ')';
-                    bracketsCount[')']++;
-                }
-                else if (inputField.value === '' || operators.includes(lastToken) || lastToken === '(') {
-                    inputField.value += '(';
-                    bracketsCount['(']++;
-                }
-            }
-        }
-        // Operator Buttons : Appending Operator While Validating Expression Syntax
-        else if (operators.includes(element.innerHTML)) {
+        // If Other Operator Buttons Are Clicked
+        else {
+            lastToken = inputField.value.slice(-1);
+
             // If There Is Already An Operator Just Before
             if (!(operators.includes(lastToken)) && lastToken !== '.') {
                 inputField.value += element.innerHTML;
             }
         }
-        // Digits And '.' Button : Adding Digits And Dot Operator (While Validating Expression Syntax)
-        else {
-            // If Input Is Decimal
-            if (element.innerHTML === '.') {
-                // Checking If There Is A Digit At The End Of The Input 
-                if (digits.includes(lastToken)) {
-                    // Checking For Invalid Syntaxes Like 5.3.2
-                    let inputFieldValue = inputField.value;
+    });
+});
 
-                    let index = inputFieldValue.length - 1;
-                    while (index >= 0 && digits.includes(inputFieldValue[index])) {
-                        index--;
-                    }
+// Digits : Adding Digits While Validating Expression Syntax
+Array.from(digitButtons).forEach((element) => {
+    element.addEventListener('click', () => {
+        lastToken = inputField.value.slice(-1);
 
-                    if (index === -1 || inputFieldValue[index] !== '.') {
-                        inputField.value += '.';
-                    }
+        if (lastToken !== ')') {
+            inputField.value += element.innerHTML;
+        }
+    });
+});
 
-                }
-            }
-            // If Input Is A Digit
-            else {
-                if (lastToken !== ')') {
-                    inputField.value += element.innerHTML;
-                }
-            }
+// Decimal Button : Adding Decimal While Validating Expression Syntax
+decimalButton.addEventListener('click', () => {
+    lastToken = inputField.value.slice(-1);
+
+    // Checking If There Is A Digit At The End Of The Input
+    if (digits.includes(lastToken)) {
+        // Checking For Invalid Syntaxes Like 5.3.2
+        let inputFieldValue = inputField.value;
+        let index = inputFieldValue.length - 1;
+        while (index >= 0 && digits.includes(inputFieldValue[index])) {
+            index--;
+        }
+
+        if (index === -1 || inputFieldValue[index] !== '.') {
+            inputField.value += '.';
         }
     }
-    ));
+});
+
+// '←' Button : Back Button
+backspaceButton.addEventListener('click', () => {
+    lastToken = inputField.value.slice(-1);
+
+    if (lastToken === '(' || lastToken === ')') {
+        bracketsCount[lastToken]--;
+    }
+    inputField.value = inputField.value.slice(0, -1);
+});
