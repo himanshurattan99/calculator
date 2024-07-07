@@ -1,3 +1,5 @@
+// Getting All The HTML Elements
+const themeButton = document.getElementById('theme-button');
 const inputField = document.getElementById('inputField');
 const outputField = document.getElementById('outputField');
 const allClearButton = document.getElementById('all-clear-button');
@@ -20,7 +22,41 @@ const bracketsCount = {
 // Storing The Last Entered Token In Input Field
 let lastToken = inputField.value.slice(-1);
 
-// Adding Click Event Listeners To All The Calculator Buttons
+// Adding Click Event Listeners To All The Buttons
+
+// Light And Dark Mode Button : Toggles Between Light And Dark Mode
+themeButton.addEventListener('click', () => {
+    if (document.body.classList.contains('light-theme')) {
+        document.body.classList.remove('light-theme');
+        themeButton.innerHTML = 'Dark Mode';
+    }
+    else {
+        document.body.classList.add('light-theme');
+        themeButton.innerHTML = 'Light Mode';
+    }
+});
+
+themeButton.addEventListener('mouseover', () => {
+    if (document.body.classList.contains('light-theme')) {
+        themeButton.style.backgroundColor = '#323232';
+        themeButton.innerHTML = 'Dark Mode';
+    }
+    else {
+        themeButton.style.backgroundColor = '#FFF9F9';
+        themeButton.innerHTML = 'Light Mode';
+    }
+});
+
+themeButton.addEventListener('mouseout', () => {
+    if (document.body.classList.contains('light-theme')) {
+        themeButton.style.backgroundColor = '#FFF9F9';
+        themeButton.innerHTML = 'Light Mode';
+    }
+    else {
+        themeButton.style.backgroundColor = '#323232';
+        themeButton.innerHTML = 'Dark Mode';
+    }
+});
 
 // 'AC' Button : Clearing Expression
 allClearButton.addEventListener('click', () => {
